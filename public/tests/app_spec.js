@@ -1,6 +1,12 @@
 describe('Serverless Single Page App', () => {
+
 	it('can show a problem view', () => {
 		learnJS.showView('#problem-1');
 		expect($('.view-container .problem-view').length).toEqual(1);
+	});
+
+	it ('shows the landing page when there is no hash', () => {
+		learnJS.showView('');
+		expect($('.view-container .landing-view').length).toEqual(1);
 	});
 });
