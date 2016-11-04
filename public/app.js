@@ -1,7 +1,14 @@
 'use strict'
 let learnJS = {
 	showView(hash) {
-		let problemView = $('<div class="problem-view">').text('Coming soon!');
-		$('.view-container').empty().append(problemView);
+		let problemView = document.createElement('div');
+		problemView.textContent = 'Coming soon!';
+		problemView.className = 'problem-view';
+		let viewContainer = document.querySelector('.view-container');
+		while(viewContainer.firstChild) {
+	 	   viewContainer.removeChild( viewContainer.firstChild);
+		}
+		viewContainer.appendChild(problemView);
+		console.log(viewContainer);
 	}
-};
+}; 
