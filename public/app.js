@@ -1,15 +1,36 @@
 'use strict'
 let learnJS = {
 
+	problems: [
+		{
+			description:'What is truth?',
+			code: '() => { return __; }'
+		},
+		{
+			description:'Simple Maths',
+			code: '() => { return 42 === 6 * __;}'
+		}
+	],
+
+	applyObject(object, element) {
+		for (let key in object) {
+			element.querySelector(`[data-name='${key}']`).textContent = object[key]; 
+		}
+	},
+
 	_ROUTES : new Map(),
 
 	problemView(id) {
 		console.log(`problemView ${id}`);
-		let newView = document.createElement('div');
-		newView.textContent = `Problem #${id} coming soon!`;
-		newView.className = 'problem-view';
+		let problemNumber = parseInt(id, 10);
+		let templates = document.querySelector('.templates');
+		let problemView = templates.querySelector('.templates .problem-view');
+		console.log(problemView);
+		let title = problemView.querySelector('.title');
+		title.textContent = `Problem #${problemNumber}`;
+		learnJS.applyObject(learnJS.problems[problemNumber - 1], problemView);
 		// console.log(newView);
-		return newView;
+		return templates;
 	},
 
 	_initializeRoutes(routes) {
@@ -38,12 +59,12 @@ let learnJS = {
 			let viewContainer = document.querySelector('.view-container');
 			// console.log(viewContainer);
 			if (viewContainer !== null) {
-				while(viewContainer.firstChild) {
-			 	   viewContainer.removeChild( viewContainer.firstChild);
-				}
 				// viewFunction(viewParameter) does not work for Jasmine tests that
 				// spy on learnJS.problemView(id) when invoking learnJS.showView(hash)
 				let child = this[viewFunction.name](viewParameter);
+				while(viewContainer.firstChild) {
+			 	   viewContainer.removeChild( viewContainer.firstChild);
+				}
 				viewContainer.appendChild(child);
 			}
 		}

@@ -2,12 +2,14 @@ describe('Serverless Single Page App', () => {
 
 	it('can show a problem view', () => {
 		learnJS.showView('#problem-1');
-		expect($('.view-container .problem-view').length).toEqual(1);
+		let problemView = document.querySelector('.view-container .problem-view');
+		expect(problemView).not.toBe(null);
 	});
 
 	it('shows the landing page when there is no hash', () => {
 		learnJS.showView('');
-		expect($('.view-container .landing-view').length).toEqual(1);
+		let landingView = document.querySelector('.view-container .landing-view');
+		expect(landingView).not.toBe(null);
 	});
 
 	it('passes the hash view parameter to the view function', () => {
@@ -55,7 +57,8 @@ describe('Serverless Single Page App', () => {
 		it('has some text content that includes the problem number', () => {
 			let id = '33';
 			let view = learnJS.problemView(id);
-			expect(view.textContent).toEqual(`Problem #${id} coming soon!`);
+			let title = view.querySelector('.problem-view .title');
+			expect(title.textContent).toEqual(`Problem #${id}`);
 		});
 	});
 });
