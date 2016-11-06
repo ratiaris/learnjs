@@ -4,7 +4,7 @@ let learnJS = {
 	_ROUTES : new Map(),
 
 	problemView(id) {
-		// console.log(`problemView ${id}`);
+		console.log(`problemView ${id}`);
 		let newView = document.createElement('div');
 		newView.textContent = `Problem #${id} coming soon!`;
 		newView.className = 'problem-view';
@@ -25,8 +25,8 @@ let learnJS = {
 	},
 
 	showView(hash) {
-		// console.log(`showView ${hash}`);
-		// console.log(this);
+		console.log(`showView ${hash}`);
+		console.log(this);
 		let hashParts = hash.split('-');
 		let viewName = hashParts[0];
 		let viewParameter = hashParts[1];
@@ -50,6 +50,11 @@ let learnJS = {
 	},
 
 	domContentLoaded() {
+		window.onhashchange = (event) => {
+			// console.log('onhashchange');
+			// console.log(event);
+			learnJS.showView(window.location.hash);
+		};
 		learnJS.showView(window.location.hash);
 	}
 }; 
