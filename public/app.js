@@ -24,6 +24,7 @@ let learnJS = {
 		console.log(`problemView ${id}`);
 		let problemNumber = parseInt(id, 10);
 		let templates = document.querySelector('.templates');
+		templates.style.visibility = 'visible';
 		let problemView = templates.querySelector('.templates .problem-view');
 		console.log(problemView);
 		let title = problemView.querySelector('.title');
@@ -67,6 +68,9 @@ let learnJS = {
 				}
 				viewContainer.appendChild(child);
 			}
+		} else {
+			let templates = document.querySelector('.templates');
+			templates.visibility = 'hidden';
 		}
 	},
 
