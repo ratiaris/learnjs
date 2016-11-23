@@ -54,11 +54,42 @@ describe('Serverless Single Page App', () => {
 	});
 
 	describe('problem view', () => {
+		let problemView; 
+
+		beforeEach(() => {
+			learnJS.showView('#problem-1');
+			problemView = document.querySelector('.view-container .problem-view');
+		});
+
 		it('has some text content that includes the problem number', () => {
-			let id = '33';
-			let view = learnJS.problemView(id);
-			let title = view.querySelector('.problem-view .title');
-			expect(title.textContent).toEqual(`Problem #${id}`);
+			let title = problemView.querySelector('.problem-view .title');
+			expect(title.textContent).toEqual(`Problem #1`);
+		});
+
+	    it('shows the problem description', function() {
+	    	console.log(problemView.querySelector('[data-name="description"]'));
+	     	expect(problemView.querySelector('[data-name="description"]').textContent).toEqual('What is truth?');
+	    });
+
+	    it('shows the problem code', function() {
+	      expect(problemView.querySelector('[data-name="code"]').textContent).toEqual('() => { return __; }');
+	    });
+
+		describe('answer section', () => {
+
+			it('can check a correct answer by hitting a button', () => {
+				let startNowButton = problemView.querySelector('.answer').textContent = 'true';
+				problemView.querySelector('.check-button').click();
+				expect(problemView.querySelector('.result').textContent).toEqual('Correct!');
+
+			});
+
+			it('rejects an incorrect answer', () => {
+				let startNowButton = problemView.querySelector('.answer').textContent = 'false';
+				problemView.querySelector('.check-button').click();
+				expect(problemView.querySelector('.result').textContent).toEqual('Incorrect!');
+
+			});
 		});
 	});
 });

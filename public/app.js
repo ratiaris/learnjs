@@ -18,7 +18,26 @@ let learnJS = (() => {
 			}
 		},
 
-		routes = new Map();
+		routes = new Map(),
+
+		checkAnswer = (problemData, theProblemView) => {
+			let answer = theProblemView.querySelector('.answer').value;
+			let functionContent = problemData.code.replace('__', answer);
+			let test = `(${functionContent})();`;
+			return eval(test);
+		},
+
+		checkAnswerCallback = (problemData, theProblemView) => {
+			return () => {
+				let resultFlash = theProblemView.querySelector('.result');
+				if (checkAnswer(problemData, theProblemView)) {
+					resultFlash.textContent = 'Correct!';
+				} else {
+					resultFlash.textContent = 'Incorrect!';
+				}
+				return false;
+			};
+		};
 
 	return {
 
@@ -28,11 +47,13 @@ let learnJS = (() => {
 			let problemNumber = parseInt(id, 10);
 			let templates = document.querySelector('.templates');
 			templates.style.visibility = 'visible';
-			let problemViewElement = templates.querySelector('.templates .problem-view');
-			console.log(problemViewElement);
-			let title = problemViewElement.querySelector('.title');
+			let theProblemView = templates.querySelector('.problem-view');
+			// console.log(theProblemView);
+			let title = theProblemView.querySelector('.title');
 			title.textContent = `Problem #${problemNumber}`;
-			applyObject(problems[problemNumber - 1], problemViewElement);
+			let problemData = problems[problemNumber - 1];
+			theProblemView.querySelector('.check-button').onclick = checkAnswerCallback(problemData, theProblemView); 
+			applyObject(problemData, theProblemView);
 			// console.log(newView);
 			return templates;
 		},

@@ -7,7 +7,6 @@
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css'>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css'>
     <script src='/vendor.js'></script>
-    <script src='/app.js'></script>
     <style type="text/css" media="all">
       body { margin-top: 30px; }
     </style>
@@ -31,9 +30,17 @@
             <h3 class='title'​></h3>
             <p data-name='description'></p>
             <pre><code data-name='code'></code></pre>
+            <form>
+              <textarea class='u-full-width answer'></textarea>
+              <div>
+                <button class='button-primary check-button'>Check Answer</button>
+                <p class='result'></p>
+              </div>
+            </form>
           </div>
         </div>
       </div>
     </div>
+    <script src='/app.js'></script>
   </body>
 </html>
