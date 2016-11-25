@@ -18,41 +18,76 @@ let learnJS = (() => {
 			}
 		},
 
+		problemData,
+
 		routes = new Map(),
 
-		checkAnswer = (problemData, theProblemView) => {
-			let answer = theProblemView.querySelector('.answer').value;
-			let functionContent = problemData.code.replace('__', answer);
+		checkAnswer = () => {
+			let functionContent = problemData.code.replace('__', answerTextArea.value);
 			let test = `(${functionContent})();`;
-			return eval(test);
+			try {
+				return eval(test);
+			} catch (error) {
+				return false;
+			}
 		},
 
-		checkAnswerCallback = (problemData, theProblemView) => {
-			return () => {
-				let resultFlash = theProblemView.querySelector('.result');
-				if (checkAnswer(problemData, theProblemView)) {
-					resultFlash.textContent = 'Correct!';
-				} else {
-					resultFlash.textContent = 'Incorrect!';
+		fadeInCallback = () => {
+			switch (resultFlashStyle.opacity) {
+				case '0': {
+					// console.log('Fade out transition complete!');
+					if (checkAnswer()) {
+						resultFlash.textContent = 'Correct!';
+					} else {
+						resultFlash.textContent = 'Incorrect!';
+					}
+					resultFlashStyle.opacity = 1;
+					break;					
 				}
-				return false;
-			};
-		};
 
+				case '1': {
+					// console.log('Fade in transition complete!');
+					break;					
+				}
+			}
+		},
+
+		checkAnswerCallback = () => {
+			resultFlashStyle.opacity = 0;
+			return false;
+		},
+
+		templates = document.querySelector('.templates'),
+		
+		theProblemView = templates.querySelector('.problem-view'),
+
+		title = theProblemView.querySelector('.title'),
+
+		resultFlash = theProblemView.querySelector('.result'),
+
+		resultFlashStyle = resultFlash.style,
+
+		answerTextArea = theProblemView.querySelector('.answer');
+
+
+	resultFlashStyle.transition = 'opacity .2s';
+	resultFlash.addEventListener('transitionend', fadeInCallback);
+	
 	return {
 
-		problemView(id) {
+		problemView(id) {	
 			// console.log(`problemView ${id}`);
 			// console.log(this);
 			let problemNumber = parseInt(id, 10);
-			let templates = document.querySelector('.templates');
+			// let templates = document.querySelector('.templates');
 			templates.style.visibility = 'visible';
-			let theProblemView = templates.querySelector('.problem-view');
+			// let theProblemView = templates.querySelector('.problem-view');
 			// console.log(theProblemView);
-			let title = theProblemView.querySelector('.title');
 			title.textContent = `Problem #${problemNumber}`;
-			let problemData = problems[problemNumber - 1];
-			theProblemView.querySelector('.check-button').onclick = checkAnswerCallback(problemData, theProblemView); 
+			problemData = problems[problemNumber - 1];
+			resultFlash.textContent = '';
+			answerTextArea.value = '';
+			theProblemView.querySelector('.check-button').onclick = checkAnswerCallback; 
 			applyObject(problemData, theProblemView);
 			// console.log(newView);
 			return templates;
@@ -79,7 +114,7 @@ let learnJS = (() => {
 					// spy on learnJS.problemView(id) when invoking learnJS.showView(hash)
 					let child = this[viewFunction.name](viewParameter);
 					while(viewContainer.firstChild) {
-				 	   viewContainer.removeChild( viewContainer.firstChild);
+				 	   viewContainer.removeChild(viewContainer.firstChild);
 					}
 					viewContainer.appendChild(child);
 				}
