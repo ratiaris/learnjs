@@ -57,22 +57,33 @@ let learnJS = (() => {
 			return false;
 		},
 
-		templates = document.querySelector('.templates'),
-		
-		theProblemView = templates.querySelector('.problem-view'),
+		templates,
 
-		title = theProblemView.querySelector('.title'),
+		theProblemView,
 
-		resultFlash = theProblemView.querySelector('.result'),
+		title,
 
-		resultFlashStyle = resultFlash.style,
+		resultFlash,
 
-		answerTextArea = theProblemView.querySelector('.answer');
+		resultFlashStyle,
 
+		answerTextArea,
 
-	resultFlashStyle.transition = 'opacity .2s';
-	resultFlash.addEventListener('transitionend', fadeInCallback);
-	
+		getTemplates = () => {
+			if (templates === undefined || templates === null ) {
+				templates = document.querySelector('.templates');
+				theProblemView = templates.querySelector('.problem-view'),
+				title = theProblemView.querySelector('.title'),
+				resultFlash = theProblemView.querySelector('.result'),
+				resultFlashStyle = resultFlash.style,
+				answerTextArea = theProblemView.querySelector('.answer');
+
+				resultFlashStyle.transition = 'opacity .2s';
+				resultFlash.addEventListener('transitionend', fadeInCallback);
+			}
+			return templates;
+		};
+
 	return {
 
 		problemView(id) {	
@@ -80,7 +91,7 @@ let learnJS = (() => {
 			// console.log(this);
 			let problemNumber = parseInt(id, 10);
 			// let templates = document.querySelector('.templates');
-			templates.style.visibility = 'visible';
+			getTemplates().style.visibility = 'visible';
 			// let theProblemView = templates.querySelector('.problem-view');
 			// console.log(theProblemView);
 			title.textContent = `Problem #${problemNumber}`;
