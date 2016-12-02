@@ -25,9 +25,11 @@ let learnJS = (() => {
 		checkAnswer = () => {
 			let functionContent = problemData.code.replace('__', answerTextArea.value);
 			let test = `(${functionContent})();`;
+			// console.log(test);
 			try {
 				return eval(test);
 			} catch (error) {
+				console.log(error);
 				return false;
 			}
 		},
@@ -53,6 +55,7 @@ let learnJS = (() => {
 		},
 
 		checkAnswerCallback = () => {
+			// console.log('checkAnswerCallback');
 			resultFlashStyle.opacity = 0;
 			return false;
 		},
@@ -85,6 +88,10 @@ let learnJS = (() => {
 		};
 
 	return {
+
+		simulateFadeInCallbackForTestingPurpose() {
+			fadeInCallback();
+		},
 
 		problemView(id) {	
 			// console.log(`problemView ${id}`);

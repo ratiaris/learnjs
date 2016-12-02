@@ -54,6 +54,7 @@ describe('Serverless Single Page App', () => {
 	});
 
 	describe('problem view', () => {
+
 		let problemView; 
 
 		beforeEach(() => {
@@ -75,20 +76,64 @@ describe('Serverless Single Page App', () => {
 	      expect(problemView.querySelector('[data-name="code"]').textContent).toEqual('() => { return __; }');
 	    });
 
+	    it('has an empty answer text area', function() {
+	      expect(problemView.querySelector('.answer').value).toEqual('');
+	    });
+
+	    it('has no feedback for answer', function() {
+	      expect(problemView.querySelector('.result').textContent).toEqual('');
+	    });
+
+		// describe("long asynchronous specs", function() {
+		//     var originalTimeout;
+		//     beforeEach(function() {
+		//     	originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+		//       	jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
+		//     });
+
+		//     it("takes a long time", function(done) {
+		//      	setTimeout(function() {
+		//         	done();
+		//       	}, 9000);
+		//     });
+
+		//     afterEach(function() {
+		//       	jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+		//     });
+		// });
+
 		describe('answer section', () => {
 
-			it('can check a correct answer by hitting a button', () => {
-				let startNowButton = problemView.querySelector('.answer').textContent = 'true';
-				problemView.querySelector('.check-button').click();
-				expect(problemView.querySelector('.result').textContent).toEqual('Correct!');
+			let answer;
+			let checkButton;
+			let result;
 
+			beforeEach(() => {
+				answer = problemView.querySelector('.answer');
+				checkButton = problemView.querySelector('.check-button');
+				result = problemView.querySelector('.result');
+			});
+
+			it('can check a correct answer by hitting a button', () => {
+				answer.value = 'true';
+				checkButton.click();
+				// UNFORTUNATELY SEEMS LIKE TRANSITIONEND CALLBACK ARE NOT TRIGGERED BY JASMINE
+				learnJS.simulateFadeInCallbackForTestingPurpose();
+				expect(result.textContent).toEqual('Correct!');
 			});
 
 			it('rejects an incorrect answer', () => {
-				let startNowButton = problemView.querySelector('.answer').textContent = 'false';
-				problemView.querySelector('.check-button').click();
-				expect(problemView.querySelector('.result').textContent).toEqual('Incorrect!');
+				answer.value = 'false';
+				checkButton.click();
+				// UNFORTUNATELY SEEMS LIKE TRANSITIONEND CALLBACK ARE NOT TRIGGERED BY JASMINE
+				learnJS.simulateFadeInCallbackForTestingPurpose();
+				expect(result.textContent).toEqual('Incorrect!');
+			});
 
+			it('is reset when switching to another problem view', () => {
+				learnJS.showView('#problem-2');
+				expect(answer.value).toEqual('');
+				expect(result.textContent).toEqual('');
 			});
 		});
 	});
