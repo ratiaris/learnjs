@@ -39,7 +39,12 @@ let learnJS = (() => {
 				case '0': {
 					// console.log('Fade out transition complete!');
 					if (checkAnswer()) {
-						resultFlash.textContent = 'Correct!';
+						let correctFlash = template('correct-flash');
+						correctFlash.querySelector('a').setAttribute('href', `#problem-${problemNumber + 1}`);
+						while(resultFlash.firstChild) {
+					 	   resultFlash.removeChild(resultFlash.firstChild);
+						}
+						resultFlash.appendChild(correctFlash);
 					} else {
 						resultFlash.textContent = 'Incorrect!';
 					}
@@ -54,6 +59,10 @@ let learnJS = (() => {
 			}
 		},
 
+		template = (name) => {
+			return templates.querySelector(`.${name}`).cloneNode(true);
+		},
+
 		checkAnswerCallback = () => {
 			// console.log('checkAnswerCallback');
 			resultFlashStyle.opacity = 0;
@@ -61,6 +70,8 @@ let learnJS = (() => {
 		},
 
 		templates,
+
+		problemNumber,
 
 		theProblemView,
 
@@ -96,9 +107,9 @@ let learnJS = (() => {
 		problemView(id) {	
 			// console.log(`problemView ${id}`);
 			// console.log(this);
-			let problemNumber = parseInt(id, 10);
-			// let templates = document.querySelector('.templates');
-			getTemplates().style.visibility = 'visible';
+			problemNumber = parseInt(id, 10);
+			getTemplates();
+			theProblemView.style.visibility = 'visible';
 			// let theProblemView = templates.querySelector('.problem-view');
 			// console.log(theProblemView);
 			title.textContent = `Problem #${problemNumber}`;

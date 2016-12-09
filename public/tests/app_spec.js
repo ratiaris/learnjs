@@ -119,7 +119,7 @@ describe('Serverless Single Page App', () => {
 				checkButton.click();
 				// UNFORTUNATELY SEEMS LIKE TRANSITIONEND CALLBACK ARE NOT TRIGGERED BY JASMINE
 				learnJS.simulateFadeInCallbackForTestingPurpose();
-				expect(result.textContent).toEqual('Correct!');
+				expect(result.textContent.trim()).toEqual('Correct! Next Problem');
 			});
 
 			it('rejects an incorrect answer', () => {
