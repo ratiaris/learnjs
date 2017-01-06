@@ -34,13 +34,24 @@ let learnJS = (() => {
 			}
 		},
 
+		buildCorrectFlash = (problemId) => {
+			let correctFlash = template('correct-flash');
+			let link = correctFlash.querySelector('a')
+			if (problemId < problems.length) {
+				link.setAttribute('href', `#problem-${problemId + 1}`);
+			} else {
+				link.setAttribute('href', '');
+				link.textContent = "You're Finished!";
+			}
+			return correctFlash;
+		},
+
 		fadeInCallback = () => {
 			switch (resultFlashStyle.opacity) {
 				case '0': {
 					// console.log('Fade out transition complete!');
 					if (checkAnswer()) {
-						let correctFlash = template('correct-flash');
-						correctFlash.querySelector('a').setAttribute('href', `#problem-${problemNumber + 1}`);
+						let correctFlash = buildCorrectFlash(problemNumber);
 						while(resultFlash.firstChild) {
 					 	   resultFlash.removeChild(resultFlash.firstChild);
 						}
@@ -151,11 +162,11 @@ let learnJS = (() => {
 		},
 
 		domContentLoaded() {
-			// console.log('domContentLoaded');
-			// console.log(this);
+			console.log('domContentLoaded');
+			console.log(this);
 			window.onhashchange = (event) => {
-				// console.log('onhashchange');
-				// console.log(this);
+				console.log('onhashchange');
+				console.log(this);
 				this.showView(window.location.hash);
 			};
 			this.showView(window.location.hash);

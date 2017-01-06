@@ -55,9 +55,8 @@ describe('Serverless Single Page App', () => {
 
 	describe('problem view', () => {
 
-		let problemView; 
-
 		beforeEach(() => {
+			// console.log("beforeEach problem view");
 			learnJS.showView('#problem-1');
 			problemView = document.querySelector('.view-container .problem-view');
 		});
@@ -68,7 +67,7 @@ describe('Serverless Single Page App', () => {
 		});
 
 	    it('shows the problem description', function() {
-	    	console.log(problemView.querySelector('[data-name="description"]'));
+	    	// console.log(problemView.querySelector('[data-name="description"]'));
 	     	expect(problemView.querySelector('[data-name="description"]').textContent).toEqual('What is truth?');
 	    });
 
@@ -104,29 +103,47 @@ describe('Serverless Single Page App', () => {
 
 		describe('answer section', () => {
 
-			let answer;
-			let checkButton;
-			let result;
+			let answer,
+				checkButton,
+				result,
+				checkAnswer = (anAnswer) => {
+					answer.value = anAnswer;
+					checkButton.click();
+					// UNFORTUNATELY SEEMS LIKE TRANSITIONEND CALLBACK ARE NOT TRIGGERED BY JASMINE
+					learnJS.simulateFadeInCallbackForTestingPurpose();
+				};
 
 			beforeEach(() => {
+				// console.log("beforeEach answer section");
 				answer = problemView.querySelector('.answer');
 				checkButton = problemView.querySelector('.check-button');
 				result = problemView.querySelector('.result');
 			});
 
 			it('can check a correct answer by hitting a button', () => {
-				answer.value = 'true';
-				checkButton.click();
-				// UNFORTUNATELY SEEMS LIKE TRANSITIONEND CALLBACK ARE NOT TRIGGERED BY JASMINE
-				learnJS.simulateFadeInCallbackForTestingPurpose();
+				checkAnswer('true');
 				expect(result.textContent.trim()).toEqual('Correct! Next Problem');
 			});
 
+			it('can navigate to next problem after a correct answer', () => {
+				checkAnswer('true');
+				result.querySelector('a').click();
+				expect(window.location.hash).toEqual('#problem-2');
+			});
+
+			it('can navigate to landing page after a correct answer to last problem', () => {
+				// console.log(window.location);
+				learnJS.problemView('2');
+				checkAnswer(7);
+				let anchor = result.querySelector('a');
+				expect(result.textContent.trim()).toEqual('Correct! You\'re Finished!');
+				expect(anchor.getAttribute('href')).toEqual('');
+				// THIS TURNS INTO AN INFINITE JASMIE LOOP
+				// anchor.click();
+			});
+
 			it('rejects an incorrect answer', () => {
-				answer.value = 'false';
-				checkButton.click();
-				// UNFORTUNATELY SEEMS LIKE TRANSITIONEND CALLBACK ARE NOT TRIGGERED BY JASMINE
-				learnJS.simulateFadeInCallbackForTestingPurpose();
+				checkAnswer('false');
 				expect(result.textContent).toEqual('Incorrect!');
 			});
 
